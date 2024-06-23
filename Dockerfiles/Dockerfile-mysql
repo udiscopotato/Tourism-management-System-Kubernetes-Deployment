@@ -1,0 +1,5 @@
+FROM mysql:5.7
+COPY ./tms.sql /docker-entrypoint-initdb.d/
+ENV MYSQL_ROOT_PASSWORD=bapun123
+ENV MYSQL_DATABASE=tms
+EXPOSE 3306

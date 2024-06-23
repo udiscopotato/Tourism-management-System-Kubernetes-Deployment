@@ -1,0 +1,29 @@
+services:
+  frontend:
+    image:  udiscopotato/tms-frontend
+    ports:
+      - "80:80"
+    environment:
+      DB_PASSWORD: "bapun123"
+      DB_HOST: "127.0.0.1"
+    depends_on:
+      - db
+    links:
+      - db
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    links:
+      - db
+
+  db:
+    image: udiscopotato/tms-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "bapun123"
+      MYSQL_DATABASE: "tms"
