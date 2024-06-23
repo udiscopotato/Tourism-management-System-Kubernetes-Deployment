@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tms-frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tms-frontend
+  template:
+    metadata:
+      labels:
+        app: tms-frontend
+    spec:
+      containers:
+      - name: tms-frontend
+        image: udiscopotato/tms-frontend
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: db-secrets
+        - name: DB_HOST
+          valueFrom: 
+            configMapKeyRef:
+              name: mysql-configmap
+              key: database_url
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tms-frontend-service
+spec:
+  selector:
+    app: tms-frontend
+  type: LoadBalancer 
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30002
